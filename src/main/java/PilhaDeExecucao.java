@@ -10,7 +10,7 @@ public class PilhaDeExecucao {
     public static void metodo2() {
         System.out.println("[Inicio] - metodo2");
 
-        Usuario usuario = new Usuario("Vinicius");
+        Usuario usuario = null;
         System.out.println(usuario.nome);
 
         System.out.println("[Fim] - metodo2");
@@ -18,8 +18,11 @@ public class PilhaDeExecucao {
 
     public static void main(String[] args) {
         System.out.println("[Inicio] - main");
-
-        metodo1();
+        try {
+            metodo1();
+        } catch (Exception e) {
+            System.out.println("Deu erro: " + e);
+        }
 
         System.out.println("[Fim] - main");
     }
