@@ -37,8 +37,12 @@ public class AdocaoController {
     @PostMapping
     @Transactional
     public ResponseEntity<String> solicitar(@RequestBody @Valid SolicitacaoDeAdocaoDTO dados){
-        this.service.solicitar(dados);
-        return ResponseEntity.ok("Adoção solicitada com sucesso!");
+        try {
+            this.service.solicitar(dados);
+        } catch (IllegalStateException | UnsupportedOperationException e) {
+            return ResponseEntity.status(HttpStatusCode.valueOf(400)).body(e.getMessage());
+        }
+            return ResponseEntity.ok("Adoção solicitada com sucesso!");
     }
 
     @PutMapping("/aprovar")
@@ -47,7 +51,7 @@ public class AdocaoController {
         try {
             this.service.aprovar(dto);
         } catch (EntityNotFoundException e ) {
-            return ResponseEntity.status(HttpStatusCode.valueOf(404)).body("Adocao nao encontrada");
+            return ResponseEntity.status(HttpStatusCode.valueOf(404)).body(e.getMessage());
         }
 
         return ResponseEntity.ok().build();
