@@ -4,6 +4,7 @@ import adopet.api.dto.AdocaoDTO;
 import adopet.api.dto.AprovarAdocaoDTO;
 import adopet.api.dto.ReprovarAdocaoDTO;
 import adopet.api.dto.SolicitacaoDeAdocaoDTO;
+import adopet.api.exception.AdocaoException;
 import adopet.api.service.AdocaoService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -37,12 +38,8 @@ public class AdocaoController {
     @PostMapping
     @Transactional
     public ResponseEntity<String> solicitar(@RequestBody @Valid SolicitacaoDeAdocaoDTO dados){
-        try {
-            this.service.solicitar(dados);
-        } catch (IllegalStateException | UnsupportedOperationException e) {
-            return ResponseEntity.status(HttpStatusCode.valueOf(400)).body(e.getMessage());
-        }
-            return ResponseEntity.ok("Adoção solicitada com sucesso!");
+        this.service.solicitar(dados);
+        return ResponseEntity.ok("Adoção solicitada com sucesso!");
     }
 
     @PutMapping("/aprovar")

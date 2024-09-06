@@ -1,6 +1,7 @@
 package adopet.api.service;
 
 import adopet.api.dto.*;
+import adopet.api.exception.AdocaoException;
 import adopet.api.model.Adocao;
 import adopet.api.model.Pet;
 import adopet.api.model.StatusAdocao;
@@ -40,19 +41,19 @@ public class AdocaoService {
         Tutor tutor = tutorRepository.getReferenceById(dto.idTutor());
 
         if (pet.getAdotado()) {
-            throw new IllegalStateException("Pet já adotado");
+            throw new AdocaoException("Pet já adotado");
         }
 
         Boolean petAdocaoEmAndamento = adocaoRepository.existsByPetIdAndStatus(dto.idPet(), StatusAdocao.AGUARDANDO_AVALIACAO);
 
         if (petAdocaoEmAndamento) {
-            throw new UnsupportedOperationException("Já existe uma solicitação de adoção em andamento para este pet");
+            throw new AdocaoException("Já existe uma solicitação de adoção em andamento para este pet");
         }
 
         Integer tutorAdocoes = adocaoRepository.countByTutorIdAndStatus(dto.idTutor(), StatusAdocao.APROVADO);
 
         if (tutorAdocoes == 2) {
-            throw new IllegalStateException("Tutor já com maximo adoções aprovadas");
+            throw new AdocaoException("Tutor já com maximo adoções aprovadas");
         }
 
         adocaoRepository.save(new Adocao(tutor,pet, dto.motivo()));
