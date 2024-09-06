@@ -20,4 +20,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(400).body(response);
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ResponseError> exception(Exception ex) {
+        var response = new ResponseError(
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST,
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(400).body(response);
+    }
+
 }
